@@ -4,7 +4,6 @@ import logging
 from config import LOG_LEVEL
 
 def get_api_keys():
-    """Load API keys from environment"""
     dotenv_path = find_dotenv()
     load_dotenv(dotenv_path)
     news_key = os.getenv("NEWS_API_KEY")
@@ -14,7 +13,6 @@ def get_api_keys():
     return news_key, groq_key, gnews_key
 
 def validate_query(query: str):
-    """Validate user query"""
     query = query.strip() if query else ""
     
     if not query:
@@ -29,7 +27,6 @@ def validate_query(query: str):
     return True, query
 
 def setup_logger(name: str):
-    """Setup logging"""
     logger = logging.getLogger(name)
     logger.setLevel(LOG_LEVEL)
     

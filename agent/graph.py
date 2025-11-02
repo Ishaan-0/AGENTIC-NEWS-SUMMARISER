@@ -1,4 +1,3 @@
-# agent/graph.py
 """
 LangGraph Workflow Definition
 Main graph that orchestrates all nodes
@@ -45,19 +44,17 @@ def build_agent_graph(newsapi_key: str, groq_key: str, gnews_key: str = None, lo
         lambda state: summarize_node(state, groq_key, logger=logger)
     )
     
-    # Define edges (workflow)
+    # Define edges 
     graph.add_edge("plan", "search")
     graph.add_edge("search", "extract")
     graph.add_edge("extract", "analyze")
     graph.add_edge("analyze", "summarize")
     
-    # Set entry and finish points
+    # entry and finish points
     graph.set_entry_point("plan")
     graph.set_finish_point("summarize")
     
-    # Compile
     return graph.compile()
-
 
 def execute_agent(query: str, newsapi_key: str, groq_key: str, gnews_key: str = None, logger=None):
     """
@@ -84,14 +81,12 @@ def execute_agent(query: str, newsapi_key: str, groq_key: str, gnews_key: str = 
             "agent_log": []
         }
         
-        # Execute
         result = agent_graph.invoke(initial_state)
         
-        # Calculate total time
+        # Calculate processing time
         processing_time = time.time() - start_time
         result["processing_time"] = processing_time
         
-        # Format output
         summary_md = ResultsFormatter.format_summary(
             result["summary"],
             processing_time,

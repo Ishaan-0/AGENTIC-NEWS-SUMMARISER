@@ -1,4 +1,3 @@
-# agent/tools.py
 """
 LangGraph tools for the agent
 """
@@ -19,7 +18,6 @@ class NewSearchTool:
         """Search articles from NewsAPI and GNews"""
         articles = []
         
-        # Try NewsAPI
         try:
             resp = requests.get(
                 f"{NEWS_API_BASE}/everything",
@@ -47,7 +45,7 @@ class NewSearchTool:
         except Exception as e:
             print(f"NewsAPI error: {e}")
         
-        # Try GNews fallback if available
+        # GNews fallback
         if self.gnews_key and len(articles) < max_results:
             try:
                 resp = requests.get(

@@ -8,7 +8,6 @@ from config import GRADIO_PORT, GRADIO_SHARE, GRADIO_THEME
 
 news_key, groq_key, gnews_key = get_api_keys()
 
-# Setup logger
 logger = setup_logger("news-aggregator-ui")
 
 # State for API keys (session-based)
@@ -19,7 +18,6 @@ api_keys_store = {
 }
 
 def save_api_keys(news_key: str, groq_key: str, gnews_key: str = ""):
-    """Save API keys to session state"""
     api_keys_store["news"] = news_key
     api_keys_store["groq"] = groq_key
     api_keys_store["gnews"] = gnews_key
@@ -28,8 +26,6 @@ def save_api_keys(news_key: str, groq_key: str, gnews_key: str = ""):
     return "✅ Configuration saved successfully!"
 
 def search_and_summarize(query: str, news_key: str, groq_key: str, gnews_key: str = ""):
-    """Execute agent and return results"""
-    
     # Validate query
     valid, processed_query = validate_query(query)
     if not valid:
@@ -40,7 +36,7 @@ def search_and_summarize(query: str, news_key: str, groq_key: str, gnews_key: st
     groq_api_key = groq_key or api_keys_store.get("groq")
     gnews_api_key = gnews_key or api_keys_store.get("gnews")
     
-    # Validate API keys
+    # verify API keys
     if not news_api_key or not groq_api_key:
         return (
             "❌ Missing API keys. Please configure in Settings tab.",
@@ -50,7 +46,6 @@ def search_and_summarize(query: str, news_key: str, groq_key: str, gnews_key: st
     
     logger.info(f"Processing query: {processed_query}")
     
-    # Execute agent
     result = execute_agent(
         processed_query,
         news_api_key,
@@ -68,7 +63,6 @@ def search_and_summarize(query: str, news_key: str, groq_key: str, gnews_key: st
     return result["summary"], sources, status
 
 def export_summary(summary_md: str, sources_df):
-    """Export summary and sources as file"""
     try:
         filename = f"summary_{date.today()}.txt"
         
@@ -78,10 +72,8 @@ def export_summary(summary_md: str, sources_df):
             encoding="utf-8",
             suffix=".txt"
         ) as f:
-            # Write summary
             f.write(summary_md)
             
-            # Write sources
             if isinstance(sources_df, pd.DataFrame) and not sources_df.empty:
                 f.write("\n\n" + "="*80 + "\n")
                 f.write("SOURCES\n")
@@ -101,7 +93,6 @@ def export_summary(summary_md: str, sources_df):
         logger.error(f"Export failed: {e}")
         return None
 
-# Build Gradio interface
 with gr.Blocks(
     title="📰 News Aggregator with LangGraph",
     theme=gr.themes.Soft(primary_hue="blue", secondary_hue="orange"),

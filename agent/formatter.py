@@ -1,4 +1,3 @@
-# agent/formatter.py
 """
 Format agent results for display
 """
@@ -14,7 +13,7 @@ class ResultsFormatter:
         """Format summary as markdown"""
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
-        return f"""## 📋 Summary for: "{query}"
+        return f"""## Summary for: "{query}"
 
 {summary}
 
@@ -52,4 +51,4 @@ class ResultsFormatter:
             return "✅ No errors"
         
         error_text = "\n".join([f"- {e}" for e in errors])
-        return f"⚠️ Errors encountered:\n{error_text}"
+        return f"Errors encountered:\n{error_text}"

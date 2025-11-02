@@ -1,4 +1,3 @@
-# agent/nodes.py
 """
 LangGraph Node Definitions
 Each node is a step in the agent workflow
@@ -10,12 +9,9 @@ from agent.tools import NewSearchTool, ContentExtractorTool, SourceAnalyzerTool
 from config import MAX_RESULTS, SEARCH_QUERY_VARIANTS
 
 def plan_node(state: AgentState, logger=None) -> AgentState:
-    """
-    PLAN NODE: Analyze query and generate search strategies
-    """
+    """PLAN NODE: Analyze query and generate search strategies"""
     query = state["query"]
     
-    # Classify intent
     intent = "general"
     query_lower = query.lower()
     
@@ -26,12 +22,11 @@ def plan_node(state: AgentState, logger=None) -> AgentState:
     
     # Generate query variations
     variations = [
-        query,  # Original
-        f"{query} news 2025",  # Add context
+        query,  # Original  
+        f"{query} news 2025",  
         " ".join(query.split()[:3])  # Simplified
     ]
     
-    # Log
     state["agent_log"].append({
         "step": "plan",
         "intent": intent,
@@ -50,13 +45,10 @@ def plan_node(state: AgentState, logger=None) -> AgentState:
 
 
 def search_node(state: AgentState, newsapi_key: str, gnews_key: str = None, logger=None) -> AgentState:
-    """
-    SEARCH NODE: Query news APIs for articles
-    """
+    """SEARCH NODE: Query news APIs for articles"""
     try:
         search_tool = NewSearchTool(newsapi_key, gnews_key)
         
-        # Use primary query
         primary_query = state["search_queries"][0]
         articles = search_tool.search(primary_query, max_results=MAX_RESULTS)
         
@@ -86,9 +78,7 @@ def search_node(state: AgentState, newsapi_key: str, gnews_key: str = None, logg
 
 
 def extract_node(state: AgentState, logger=None) -> AgentState:
-    """
-    EXTRACT NODE: Extract full content from article URLs
-    """
+    """EXTRACT NODE: Extract full content from article URLs"""
     try:
         if not state["raw_articles"]:
             state["errors"].append("No articles to extract")
@@ -122,9 +112,7 @@ def extract_node(state: AgentState, logger=None) -> AgentState:
 
 
 def analyze_node(state: AgentState, logger=None) -> AgentState:
-    """
-    ANALYZE NODE: Score sources by credibility
-    """
+    """ANALYZE NODE: Score sources by credibility"""
     try:
         if not state["extracted_articles"]:
             state["errors"].append("No articles to analyze")
@@ -159,9 +147,7 @@ def analyze_node(state: AgentState, logger=None) -> AgentState:
 
 
 def summarize_node(state: AgentState, groq_key: str, logger=None) -> AgentState:
-    """
-    SUMMARIZE NODE: Generate AI summary using Groq LLM
-    """
+    """SUMMARIZE NODE: Generate AI summary using Groq LLM"""
     try:
         if not state["analyzed_articles"]:
             state["errors"].append("No articles to summarize")
@@ -177,7 +163,7 @@ def summarize_node(state: AgentState, groq_key: str, logger=None) -> AgentState:
             max_tokens=LLM_MAX_TOKENS
         )
         
-        # Prepare context
+        # context
         articles_context = "\n\n".join([
             f"[Source: {a.get('source', 'Unknown')} - {a.get('credibility_tier', 'unknown')}]\n"
             f"Title: {a.get('title', 'N/A')}\n"
