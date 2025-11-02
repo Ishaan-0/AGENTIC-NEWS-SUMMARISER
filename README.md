@@ -48,3 +48,36 @@ Contains the heart of the AI agent logic:
     - `summarize_node`: Synthesizes a structured summary using Groq LLM
 - `tools.py`: Utility tools for search, extraction, and source analysis:
     - `NewSearchTool`: Aggregates from NewsAPI/GNews, deduplicates results
+    - `ContentExtractorTool`: Scrapes full content using BeautifulSoup
+    - `SourceAnalyzerTool`: Scores and tiers sources; ranks articles for credibility
+- `formatter.py`: Output formatting utilities
+
+## Workflow Summary
+
+1. **User provides a news topic.**
+2. **Plan Node:** Deduces user intent, crafts search queries.
+3. **Search Node:** Queries APIs, gathers top, recent articles.
+4. **Extract Node:** Performs deep scraping, recovers full article text.
+5. **Analyze Node:** Assigns credibility based on source reputation, recency, and evidence.
+6. **Summarize Node:** Uses LLM to synthesize the best articles into a flowing, reference-rich summary.
+
+## Example UI Flow
+
+1. Enter a topic (e.g., "AI regulations").
+2. App searches/evaluates articles, summarizes findings, and shows a source table.
+3. Download and export summaries with references.
+
+## Technologies Used
+
+- Python
+- LangGraph (workflow orchestration)
+- LangChain & Groq LLM API (summarization)
+- Gradio (UI interface)
+- Requests, BeautifulSoup (web scraping/content extraction)
+- Pandas (tabular data)
+
+## Getting Started
+
+1. Clone the repo and install dependencies
+2. Provide API Keys (NewsAPI, Groq, optional GNews)
+3. Run `app.py` to launch Gradio UI
