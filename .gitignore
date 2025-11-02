@@ -1,0 +1,15 @@
+.env
+.env.local
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.idea/
+*.swp
+*.swo
+.newsAgg311/
+testing/

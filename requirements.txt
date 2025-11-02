@@ -1,0 +1,12 @@
+gradio
+langgraph
+langchain
+langchain-core
+langchain-groq
+langchain-community
+groq
+requests
+beautifulsoup4
+lxml
+python-dotenv
+pandas
